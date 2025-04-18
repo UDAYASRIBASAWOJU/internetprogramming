@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intereactive Flahcards</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #e2e2e2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    <h1>
+        Interactive <br> Flashcards
+    </h1>
+  <div class="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Enter username">
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="login()">Login</button>
+    <p id="error-message" style="color: red; display: none;">Incorrect credentials!</p>
+  </div>
+  
+  <script>
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const teacherCredentials = { username: 'teacher', password: 'teacher123' };
+      const studentCredentials = { username: 'student', password: 'student123' };
+
+      if (username === teacherCredentials.username && password === teacherCredentials.password) {
+        window.location.href = 'teacher-input.html';  // Redirect to teacher input page
+      } else if (username === studentCredentials.username && password === studentCredentials.password) {
+        window.location.href = 'student-quiz.html';  // Redirect to student quiz page
+      } else {
+        document.getElementById('error-message').style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
