@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Input</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .input-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      margin: 0 auto;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="input-container">
+    <h2>Teacher - Input Flashcards</h2>
+    <input type="text" id="question" placeholder="Enter question">
+    <input type="text" id="answer" placeholder="Enter answer">
+    <input type="text" id="options" placeholder="Enter options (comma-separated)">
+    <button onclick="addFlashcard()">Add Flashcard</button>
+    <div id="flashcard-list"></div>
+    <button onclick="goToStudentPage()">Go to Student Assignment</button>
+  </div>
+
+  <script>
+    let flashcards = [];
+
+    function addFlashcard() {
+      const question = document.getElementById('question').value;
+      const answer = document.getElementById('answer').value;
+      const options = document.getElementById('options').value.split(',');
+
+      if (question && answer && options.length > 0) {
+        const flashcard = { question, answer, options };
+        flashcards.push(flashcard);
+        displayFlashcards();
+      }
+    }
+
+    function displayFlashcards() {
+      const flashcardList = document.getElementById('flashcard-list');
+      flashcardList.innerHTML = '';
+      flashcards.forEach((flashcard, index) => {
+        const flashcardDiv = document.createElement('div');
+        flashcardDiv.innerHTML = `<p><strong>Q:</strong> ${flashcard.question} <strong>A:</strong> ${flashcard.answer} <strong>Options:</strong> ${flashcard.options.join(', ')}</p>`;
+        flashcardList.appendChild(flashcardDiv);
+      });
+    }
+
+    function goToStudentPage() {
+      localStorage.setItem('flashcards', JSON.stringify(flashcards));
+      window.location.href = 'student-quiz.html';  // Redirect to student quiz page
+    }
+  </script>
+</body>
+</html>
