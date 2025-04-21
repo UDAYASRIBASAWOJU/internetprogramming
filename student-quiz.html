@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e2e2e2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      border-radius: 25px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 400px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    #score {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .card {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      perspective: 1000px;
+      margin: 0 auto 20px;
+    }
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: #e4ebf7;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .option-btn {
+      background: #f15a29;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .option-btn.correct {
+      background: #4CAF50;
+    }
+    .option-btn.incorrect {
+      background: #e74c3c;
+    }
+    .btn-group button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: #4178a6;
+      color: white;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+    }
+    #end-message {
+      display: none;
+      font-size: 1.2rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Student Quiz</h1>
+    <div id="score">Score: 0</div>
+    <div class="card" id="flashcard">
+      <div class="card-inner">
+        <div class="card-front" id="question">Question</div>
+        <div class="card-back" id="answer">Answer</div>
+      </div>
+    </div>
+    <div class="options" id="options"></div>
+    <div class="btn-group">
+      <button id="flip-btn">Flip</button>
+      <button id="next-btn">Next</button>
+    </div>
+    <div id="end-message">
+      <p>End of Questions. Well done!</p>
+      <p>Your final score is: <span id="final-score"></span></p>
+    </div>
+  </div>
+
+  <script>
+    let flashcards = JSON.parse(localStorage.getItem('flashcards')) || [];
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    const questionEl = document.getElementById("question");
+    const answerEl = document.getElementById("answer");
+    const optionsEl = document.getElementById("options");
+    const scoreEl = document.getElementById("score");
+    const flashcard = document.getElementById("flashcard");
+    const endMessageEl = document.getElementById("end-message");
+    const finalScoreEl = document.getElementById("final-score");
+
+    function loadCard() {
+      answered = false;
+      flashcard.classList.remove("flipped");
+      const card = flashcards[current];
+      questionEl.textContent = card.question;
+      answerEl.textContent = card.answer;
+      optionsEl.innerHTML = "";
+
+      card.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.className = "option-btn";
+        btn.addEventListener("click", () => {
+          if (!answered) {
+            if (option === card.answer) {
+              score++;
+              btn.classList.add("correct");
+            } else {
+              btn.classList.add("incorrect");
+            }
+            scoreEl.textContent = `Score: ${score}`;
+            answered = true;
+          }
+        });
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    document.getElementById("flip-btn").addEventListener("click", () => {
+      flashcard.classList.toggle("flipped");
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      current++;
+      if (current < flashcards.length) {
+        loadCard();
+      } else {
+        endMessageEl.style.display = "block";
+        finalScoreEl.textContent = score;
+        document.getElementById("next-btn").disabled = true;
+      }
+    });
+
+    loadCard();
+  </script>
+
+</body>
+</html>
