@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Flashcards | Learning Reinvented</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --accent-color: #4cc9f0;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --success-color: #4bb543;
+      --error-color: #ff3333;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+      color: var(--dark-color);
+      overflow-x: hidden;
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background: white;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.8rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-links li {
+      margin-left: 30px;
+    }
+    
+    .nav-links a {
+      color: var(--dark-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: var(--primary-color);
+      bottom: -5px;
+      left: 0;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 50px 50px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-content {
+      max-width: 600px;
+      z-index: 1;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      color: var(--primary-color);
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 15px 30px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn i {
+      margin-left: 10px;
+    }
+    
+    .hero-image {
+      position: absolute;
+      right: 50px;
+      width: 600px;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .features {
+      padding: 100px 50px;
+      background: white;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 70px;
+      color: var(--primary-color);
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .feature-card {
+      background: var(--light-color);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: white;
+      font-size: 2rem;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+    
+    .how-it-works {
+      padding: 100px 50px;
+      background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+    }
+    
+    .steps {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .step {
+      flex: 1;
+      min-width: 250px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .step-number {
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 auto 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .step:nth-child(2) .step-number {
+      background: var(--secondary-color);
+    }
+    
+    .step:nth-child(3) .step-number {
+      background: var(--accent-color);
+    }
+    
+    .step h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+    
+    .step p {
+      opacity: 0.8;
+    }
+    
+    .testimonials {
+      padding: 100px 50px;
+      background: white;
+    }
+    
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .testimonial-card {
+      background: var(--light-color);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+    
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 5rem;
+      color: rgba(67, 97, 238, 0.1);
+      font-family: serif;
+      line-height: 1;
+    }
+    
+    .testimonial-content {
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      margin-right: 15px;
+    }
+    
+    .author-info h4 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+    
+    .author-info p {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    
+    .cta {
+      padding: 100px 50px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+    }
+    
+    .cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .cta p {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .btn-light {
+      background: white;
+      color: var(--primary-color);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-light:hover {
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .footer {
+      background: var(--dark-color);
+      color: white;
+      padding: 50px;
+      text-align: center;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 30px 0;
+    }
+    
+    .footer-links li {
+      margin: 0 15px;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent-color);
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+    }
+    
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 10px;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background: var(--primary-color);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+    
+    .floating-icons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+    
+    .floating-icon {
+      position: absolute;
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: rgba(67, 97, 238, 0.1);
+      border-radius: 50%;
+      animation: float 15s linear infinite;
+      bottom: -150px;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        bottom: -100px;
+      }
+      100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+        bottom: 1000px;
+      }
+    }
+    
+    @media (max-width: 992px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 150px;
+      }
+      
+      .hero-content {
+        margin-bottom: 50px;
+      }
+      
+      .hero-image {
+        position: relative;
+        right: auto;
+        width: 100%;
+        max-width: 500px;
+      }
+      
+      .navbar {
+        padding: 15px 20px;
+      }
+      
+      .nav-links li {
+        margin-left: 15px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .features, .how-it-works, .testimonials, .cta {
+        padding: 70px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar animate_animated animate_fadeInDown">
+    <a href="#" class="logo">
+      <i class="fas fa-graduation-cap"></i>
+      <span>FlashCardsPro</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+  
+  <section class="hero">
+    <div class="floating-icons">
+      <div class="floating-icon"></div>
+      <div class="floating-icon"></div>
+      <div class="floating-icon"></div>
+      <div class="floating-icon"></div>
+    </div>
+    
+    <div class="hero-content animate_animated animate_fadeInLeft">
+      <h1>Revolutionize Learning With Interactive Flashcards</h1>
+      <p>Our platform makes studying more effective and engaging through scientifically proven active recall and spaced repetition techniques.</p>
+      <a href="login.html" class="btn animate_animated animatefadeInUp animate_delay-1s">
+        Get Started <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+    
+    <img src="https://illustrations.popsy.co/amber/digital-learning.svg" alt="Learning Illustration with FlashCards" class="hero-image animate_animated animate_fadeInRight">
+  </section>
+  
+  <section class="features" id="features">
+    <h2 class="section-title animate_animated animate_fadeIn">Key Features</h2>
+    <div class="features-grid">
+      <div class="feature-card animate_animated animate_fadeInUp">
+        <div class="feature-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <h3>Active Recall</h3>
+        <p>Strengthen memory retention by actively stimulating recall during the learning process.</p>
+      </div>
+      
+      <div class="feature-card animate_animated animatefadeInUp animate_delay-1s">
+        <div class="feature-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Progress Tracking</h3>
+        <p>Monitor your learning journey with detailed statistics and performance analytics.</p>
+      </div>
+      
+      <div class="feature-card animate_animated animatefadeInUp animate_delay-2s">
+        <div class="feature-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3>Collaborative Learning</h3>
+        <p>Share flashcard decks with classmates or create study groups for collaborative learning.</p>
+      </div>
+    </div>
+  </section>
+  
+  <section class="how-it-works" id="how-it-works">
+    <h2 class="section-title animate_animated animate_fadeIn">How It Works</h2>
+    <div class="steps">
+      <div class="step animate_animated animate_fadeIn">
+        <div class="step-number">1</div>
+        <h3>Create Flashcards</h3>
+        <p>Teachers or students can easily create digital flashcards with questions and answers.</p>
+      </div>
+      
+      <div class="step animate_animated animatefadeIn animate_delay-1s">
+        <div class="step-number">2</div>
+        <h3>Study Smart</h3>
+        <p>Use our spaced repetition algorithm to study at optimal intervals for maximum retention.</p>
+      </div>
+      
+      <div class="step animate_animated animatefadeIn animate_delay-2s">
+        <div class="step-number">3</div>
+        <h3>Track Progress</h3>
+        <p>Monitor your learning progress and identify areas that need more attention.</p>
+      </div>
+    </div>
+  </section>
+  
+  <section class="testimonials" id="testimonials">
+    <h2 class="section-title animate_animated animate_fadeIn">What Our Users Say</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card animate_animated animate_fadeInUp">
+        <div class="testimonial-content">
+          <p>This platform has completely transformed how I study. The active recall method has helped me retain information so much better than traditional methods.</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">JS</div>
+          <div class="author-info">
+            <h4>Shaik Mohammad Raith</h4>
+            <p>Mechanical Student</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial-card animate_animated animatefadeInUp animate_delay-1s">
+        <div class="testimonial-content">
+          <p>As a teacher, I love being able to create flashcard decks for my students. It's made reviewing material before tests much more effective.</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">AD</div>
+          <div class="author-info">
+            <h4>Basawoju Udaya Sri</h4>
+            <p>Teacher</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial-card animate_animated animatefadeInUp animate_delay-2s">
+        <div class="testimonial-content">
+          <p>The spaced repetition algorithm is a game-changer. I've been able to cut my study time in half while improving my test scores.</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">TP</div>
+          <div class="author-info">
+            <h4>Vallapu Mohan Prasad</h4>
+            <p>Inter Student</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="cta animate_animated animate_fadeIn">
+    <h2>Ready to Transform Your Learning?</h2>
+    <p>Join thousands of students and teachers who are already using FlashCardsPro to make learning more effective and enjoyable.</p>
+    <a href="login.html" class="btn btn-light">
+      Start Learning Now <i class="fas fa-arrow-right"></i>
+    </a>
+  </section>
+  
+  <footer class="footer">
+    <div class="logo">
+      <i class="fas fa-graduation-cap"></i>
+      <span>FlashCardsPro</span>
+    </div>
+    
+    <ul class="footer-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#testimonials">Testimonials</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms of Service</a></li>
+    </ul>
+    
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+    
+    <p class="copyright">© 2025 FlashCardsPro. All rights reserved.</p>
+  </footer>
+  
+  <script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // Animation on scroll
+    function animateOnScroll() {
+      const elements = document.querySelectorAll('.animate__animated');
+      
+      elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.3;
+        
+        if (elementPosition < screenPosition) {
+          const animation = element.getAttribute('data-animation');
+          element.classList.add(animation);
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', animateOnScroll);
+    document.addEventListener('DOMContentLoaded', animateOnScroll);
+    
+    // Add hover effect to feature cards
+    const featureCards = document.querySelectorAll('.feature-card');
+    featureCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px)';
+        card.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.1)';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.05)';
+      });
+    });
+  </script>
+</body>
+</html>
