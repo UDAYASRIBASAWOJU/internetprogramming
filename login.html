@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Flashcards | Login</title>
+  <title>Login | FlashLearn</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
-      --primary-color: #4361ee;
-      --secondary-color: #3f37c9;
-      --accent-color: #4cc9f0;
+      --primary-color: #77eaf9;
+      --secondary-color: #3a71c3;
+      --accent-color: #98e4f3;
       --light-color: #f8f9fa;
       --dark-color: #212529;
-      --success-color: #4bb543;
-      --error-color: #ff3333;
+      --success-color: #38b000;
+      --error-color: #ff5a5f;
+      --teacher-color: #ff7b00;
+      --student-color: #00b4d8;
     }
     
     * {
@@ -25,7 +28,7 @@
     
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #4361ee, #3f37c9);
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       display: flex;
       justify-content: center;
       align-items: center;
@@ -34,38 +37,23 @@
       overflow-x: hidden;
     }
     
-    .header-animation {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100px;
-      background: rgba(255, 255, 255, 0.1);
-      z-index: -1;
-      animation: wave 8s linear infinite;
-    }
-    
-    @keyframes wave {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-    
-    .login-wrapper {
-      display: flex;
+    .login-container {
       width: 90%;
-      max-width: 1200px;
+      max-width: 1000px;
       background: white;
       border-radius: 20px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
       overflow: hidden;
       animation: fadeInUp 0.8s ease-out;
+      display: flex;
+      position: relative;
     }
     
     .login-hero {
       flex: 1;
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      padding: 60px 40px;
+      padding: 60px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -84,6 +72,7 @@
       height: 200px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
+      animation: pulse 8s infinite ease-in-out;
     }
     
     .login-hero::after {
@@ -95,141 +84,252 @@
       height: 300px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
+      animation: pulse 12s infinite ease-in-out;
+      animation-delay: 2s;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 0.5; }
     }
     
     .login-hero h1 {
-      font-size: 3rem;
+      font-size: 2.8rem;
       margin-bottom: 20px;
       position: relative;
       z-index: 1;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      animation: fadeInDown 1s ease-out;
     }
     
     .login-hero p {
       font-size: 1.1rem;
       opacity: 0.9;
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       position: relative;
       z-index: 1;
+      animation: fadeIn 1.5s ease-out;
     }
     
     .card-animation {
-      width: 200px;
-      height: 120px;
+      width: 220px;
+      height: 140px;
       background: white;
-      border-radius: 10px;
+      border-radius: 12px;
       margin: 20px 0;
       position: relative;
       transform-style: preserve-3d;
-      animation: cardFlip 6s infinite ease-in-out;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: cardFlip 6s infinite ease-in-out, float 8s infinite ease-in-out;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
     }
     
     @keyframes cardFlip {
       0%, 100% { transform: rotateY(0deg); }
       50% { transform: rotateY(180deg); }
     }
-    
-    .login-container {
+  
+    .login-form {
       flex: 1;
-      padding: 60px 40px;
+      padding: 60px;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
     
-    .login-container h2 {
+    .login-form h2 {
       font-size: 2rem;
       margin-bottom: 30px;
       color: var(--primary-color);
       text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+    
+    .avatar-selection {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 30px;
+      animation: fadeIn 1.2s ease-out;
+    }
+    
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 4px solid transparent;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .avatar.student {
+      background: linear-gradient(135deg, var(--student-color), #0096c7);
+      color: white;
+    }
+    
+    .avatar.teacher {
+      background: linear-gradient(135deg, var(--teacher-color), #ff9500);
+      color: white;
+    }
+    
+    .avatar.selected {
+      transform: scale(1.15);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      border-color: white;
+    }
+    
+    .avatar:hover {
+      transform: scale(1.1);
     }
     
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       position: relative;
+      animation: fadeIn 1.4s ease-out;
     }
     
     .input-group label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       font-weight: 500;
+      color: #555;
+    }
+    
+    .input-field {
+      position: relative;
+    }
+    
+    .input-field i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      transition: all 0.3s ease;
     }
     
     .input-group input {
       width: 100%;
-      padding: 12px 15px;
+      padding: 15px 20px 15px 50px;
       border: 2px solid #e0e0e0;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1rem;
       transition: all 0.3s ease;
     }
     
     .input-group input:focus {
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+      box-shadow: 0 0 0 4px rgba(118, 216, 240, 0.2);
       outline: none;
     }
     
-    .login-btn {
+    .input-group input:focus + i {
+      color: var(--primary-color);
+      transform: translateY(-50%) scale(1.2);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 15px;
       background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
       color: white;
       border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      margin-top: 20px;
+      box-shadow: 0 10px 20px rgba(114, 229, 240, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 1.6s ease-out;
     }
     
-    .login-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+    .btn i {
+      margin-right: 10px;
+      position: relative;
+      z-index: 2;
     }
     
-    .login-btn:active {
+    .btn span {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
+      transition: all 0.6s ease;
+      z-index: 1;
+    }
+    
+    .btn:hover::before {
+      left: 0;
+    }
+    
+    .btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(103, 209, 239, 0.4);
+    }
+    
+    .btn:active {
       transform: translateY(0);
     }
     
-    #error-message {
+    .error-message {
       color: var(--error-color);
       text-align: center;
-      margin-top: 15px;
+      margin-top: 20px;
       font-size: 0.9rem;
       display: none;
-    }
-    
-    .shake {
       animation: shake 0.5s;
     }
     
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-5px); }
-      40%, 80% { transform: translateX(5px); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
     }
     
-    .footer {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
+    .login-footer {
       text-align: center;
-      color: white;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
       font-size: 0.9rem;
-      opacity: 0.8;
+      color: #666;
+      animation: fadeIn 1.8s ease-out;
     }
     
-    .footer a {
-      color: white;
+    .login-footer a {
+      color: var(--primary-color);
       text-decoration: none;
+      font-weight: 500;
       transition: all 0.3s ease;
     }
     
-    .footer a:hover {
-      color: var(--accent-color);
+    .login-footer a:hover {
+      color: var(--secondary-color);
+      text-decoration: underline;
     }
     
     .floating-icons {
@@ -245,225 +345,252 @@
     .floating-icon {
       position: absolute;
       display: block;
-      width: 20px;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
       border-radius: 50%;
       animation: float 15s linear infinite;
       bottom: -150px;
     }
     
+    /* Create multiple floating icons with different sizes and positions */
     .floating-icon:nth-child(1) {
-      left: 25%;
-      width: 80px;
-      height: 80px;
-      animation-delay: 0s;
-      animation-duration: 20s;
-    }
-    
-    .floating-icon:nth-child(2) {
       left: 10%;
       width: 20px;
       height: 20px;
+      animation-delay: 0s;
+      animation-duration: 15s;
+    }
+    
+    .floating-icon:nth-child(2) {
+      left: 25%;
+      width: 40px;
+      height: 40px;
       animation-delay: 2s;
-      animation-duration: 12s;
+      animation-duration: 20s;
     }
     
     .floating-icon:nth-child(3) {
       left: 70%;
-      width: 60px;
-      height: 60px;
+      width: 30px;
+      height: 30px;
       animation-delay: 4s;
+      animation-duration: 18s;
     }
     
     .floating-icon:nth-child(4) {
       left: 40%;
-      width: 30px;
-      height: 30px;
-      animation-delay: 0s;
-      animation-duration: 18s;
+      width: 25px;
+      height: 25px;
+      animation-delay: 1s;
+      animation-duration: 22s;
     }
     
     .floating-icon:nth-child(5) {
       left: 65%;
-      width: 40px;
-      height: 40px;
-      animation-delay: 0s;
-    }
-    
-    .floating-icon:nth-child(6) {
-      left: 75%;
-      width: 25px;
-      height: 25px;
+      width: 15px;
+      height: 15px;
       animation-delay: 3s;
-    }
-    
-    .floating-icon:nth-child(7) {
-      left: 35%;
-      width: 50px;
-      height: 50px;
-      animation-delay: 7s;
-    }
-    
-    .floating-icon:nth-child(8) {
-      left: 50%;
-      width: 35px;
-      height: 35px;
-      animation-delay: 15s;
-      animation-duration: 25s;
-    }
-    
-    @keyframes float {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-        bottom: -100px;
-      }
-      100% {
-        transform: translateY(-1000px) rotate(720deg);
-        opacity: 0;
-        bottom: 1000px;
-      }
+      animation-duration: 16s;
     }
     
     @media (max-width: 768px) {
-      .login-wrapper {
+      .login-container {
         flex-direction: column;
         width: 95%;
+        max-width: 500px;
       }
       
       .login-hero {
         padding: 40px 20px;
+        order: -1;
       }
       
       .login-hero h1 {
         font-size: 2rem;
       }
       
-      .login-container {
-        padding: 40px 20px;
+      .login-form {
+        padding: 40px 30px;
+      }
+      
+      .avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .avatar-selection {
+        gap: 15px;
+      }
+      
+      .avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+      
+      .login-form {
+        padding: 30px 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="header-animation"></div>
-  <div class="floating-icons">
-    <div class="floating-icon"></div>
-    <div class="floating-icon"></div>
-    <div class="floating-icon"></div>
-    <div class="floating-icon"></div>
-    <div class="floating-icon"></div>
-    <div class="floating-icon"></div>
-    <div class="floating-icon"></div>
-    <div class="floating-icon"></div>
-  </div>
-  
-  <div class="login-wrapper">
+  <div class="login-container">
+    <div class="floating-icons">
+      <div class="floating-icon"></div>
+      <div class="floating-icon"></div>
+      <div class="floating-icon"></div>
+      <div class="floating-icon"></div>
+      <div class="floating-icon"></div>
+    </div>
+    
     <div class="login-hero">
-      <h1 class="animate__animated animate__fadeInDown">Interactive Flashcards</h1>
-      <p class="animate__animated animate__fadeIn animate__delay-1s">Enhance your learning experience with our interactive flashcard system</p>
+      <h1>Welcome to FlashcardsPro</h1>
+      <p>Revolutionize your learning experience with interactive flashcards</p>
       <div class="card-animation"></div>
     </div>
     
-    <div class="login-container">
-      <h2 class="animate__animated animate__fadeIn">Welcome Back!</h2>
-      <div class="input-group animate__animated animate__fadeIn animate__delay-1s">
+    <div class="login-form">
+      <h2>Login to Continue</h2>
+      
+      <div class="avatar-selection">
+        <div class="avatar student selected" data-role="student" onclick="selectRole(this)">
+          <i class="fas fa-user-graduate"></i>
+        </div>
+        <div class="avatar teacher" data-role="teacher" onclick="selectRole(this)">
+          <i class="fas fa-chalkboard-teacher"></i>
+        </div>
+      </div>
+      
+      <div class="input-group">
         <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter your username" aria-required="true">
+        <div class="input-field">
+          <i class="fas fa-user"></i>
+          <input type="text" id="username" placeholder="Enter your username">
+        </div>
       </div>
-      <div class="input-group animate__animated animate__fadeIn animate__delay-1s">
+      
+      <div class="input-group">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password" aria-required="true">
+        <div class="input-field">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="Enter your password">
+        </div>
       </div>
-      <button class="login-btn animate__animated animate__fadeIn animate__delay-2s" onclick="login()">Login</button>
-      <p id="error-message">Incorrect credentials!</p>
+      
+      <button class="btn" onclick="login()">
+        <span><i class="fas fa-sign-in-alt"></i> Login</span>
+      </button>
+      
+      <p class="error-message" id="error-message">Incorrect username or password</p>
+      
+      <div class="login-footer">
+        Need help? <a href="#">Contact support</a>
+      </div>
     </div>
   </div>
   
-  <div class="footer animate__animated animate__fadeIn animate__delay-3s">
-    <p>© 2025 Interactive Flashcards | Designed for Enhanced Learning</p>
-  </div>
-  
   <script>
+    let selectedRole = 'student';
+    
+    function selectRole(element) {
+      // Remove selected class from all avatars
+      document.querySelectorAll('.avatar').forEach(avatar => {
+        avatar.classList.remove('selected');
+      });
+      
+      // Add selected class to clicked avatar
+      element.classList.add('selected');
+      selectedRole = element.getAttribute('data-role');
+      
+      // Add bounce animation
+      element.classList.add('animate_animated', 'animate_bounceIn');
+      setTimeout(() => {
+        element.classList.remove('animate_animated', 'animate_bounceIn');
+      }, 1000);
+    }
+    
     function login() {
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
       const errorMessage = document.getElementById('error-message');
-      const loginButton = document.querySelector('.login-btn');
+      const loginBtn = document.querySelector('.btn');
       
-      // Add pulse animation on click
-      loginButton.classList.add('animate__animated', 'animate__pulse');
-      setTimeout(() => {
-        loginButton.classList.remove('animate__animated', 'animate__pulse');
-      }, 500);
-
-      // Teacher credentials
-      const teacherCredentials = [
-        { username: 'teacher', password: 'teacher123' },
-        { username: 'professor', password: 'prof123' }
-      ];
+      // Debug: Log the selected role
+      console.log('Selected Role:', selectedRole);
       
-      // Student credentials
-      const studentCredentials = [
-        { username: 'student', password: 'student123' },
-        { username: 'learner', password: 'learn123' }
-      ];
-      
-      // Check teacher credentials
-      const isTeacher = teacherCredentials.some(cred => 
-        cred.username === username && cred.password === password
-      );
-      
-      // Check student credentials
-      const isStudent = studentCredentials.some(cred => 
-        cred.username === username && cred.password === password
-      );
-      
-      if (isTeacher) {
-        // Animation before redirect
-        document.querySelector('.login-wrapper').classList.add('animate__animated', 'animate__fadeOut');
-        setTimeout(() => {
-          try {
-            window.location.href = 'teacher-input.html';
-          } catch (e) {
-            showError('Failed to redirect to Teacher Dashboard. Please check if teacher-input.html exists.');
-            document.querySelector('.login-wrapper').classList.remove('animate__animated', 'animate__fadeOut');
-          }
-        }, 800);
-      } else if (isStudent) {
-        document.querySelector('.login-wrapper').classList.add('animate__animated', 'animate__fadeOut');
-        setTimeout(() => {
-          try {
-            window.location.href = 'student-quiz.html';
-          } catch (e) {
-            showError('Failed to redirect to Student Quiz. Please check if student-quiz.html exists.');
-            document.querySelector('.login-wrapper').classList.remove('animate__animated', 'animate__fadeOut');
-          }
-        }, 800);
-      } else {
+      // Validate inputs
+      if (!username || !password) {
+        errorMessage.textContent = 'Please enter both username and password';
         errorMessage.style.display = 'block';
-        errorMessage.classList.add('shake');
-        setTimeout(() => {
-          errorMessage.style.display = 'none';
-          errorMessage.classList.remove('shake');
-        }, 3000);
+        return;
       }
-    }
-    
-    // Show error with animation
-    function showError(message) {
-      const errorMessage = document.getElementById('error-message');
-      errorMessage.textContent = message;
-      errorMessage.style.display = 'block';
-      errorMessage.classList.add('shake');
+      
+      // Show loading state
+      loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Im Groot';
+      loginBtn.disabled = true;
+      
+      // Simulate API call with timeout
       setTimeout(() => {
-        errorMessage.style.display = 'none';
-        errorMessage.classList.remove('shake');
-      }, 3000);
+        // Teacher credentials
+        const teacherCredentials = [
+          { username: 'AmanPal', password: 'daridruda' },
+          { username: 'professor', password: 'prof123' }
+        ];
+        
+        // Student credentials
+        const studentCredentials = [
+          { username: 'thanos', password: '0/0' },
+          { username: 'learner', password: 'learn123' }
+        ];
+        
+        let isValid = false;
+        let redirectPage = '';
+        
+        if (selectedRole === 'teacher') {
+          isValid = teacherCredentials.some(cred => 
+            cred.username.toLowerCase() === username.toLowerCase() && 
+            cred.password.toLowerCase() === password.toLowerCase()
+          );
+          redirectPage = 'teacher-input.html';
+        } else {
+          isValid = studentCredentials.some(cred => 
+            cred.username.toLowerCase() === username.toLowerCase() && 
+            cred.password.toLowerCase() === password.toLowerCase()
+          );
+          redirectPage = 'student-quiz.html';
+        }
+        
+        if (isValid) {
+          // Success - redirect with animation
+          document.querySelector('.login-container').classList.add('animate_animated', 'animate_fadeOut');
+          setTimeout(() => {
+            window.location.href = redirectPage;
+          }, 800);
+        } else {
+          // Error - show message and reset button
+          errorMessage.textContent = 'Invalid credentials for selected role';
+          errorMessage.style.display = 'block';
+          loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+          loginBtn.disabled = false;
+          
+          // Shake animation for error
+          document.querySelector('.login-container').classList.add('animate_animated', 'animate_shakeX');
+          setTimeout(() => {
+            document.querySelector('.login-container').classList.remove('animate_animated', 'animate_shakeX');
+          }, 1000);
+          
+          // Hide error after 3 seconds
+          setTimeout(() => {
+            errorMessage.style.display = 'none';
+          }, 3000);
+        }
+      }, 1500);
     }
     
-    // Add event listener for Enter key
+    // Add keyboard support
     document.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         login();
@@ -474,15 +601,22 @@
     const inputs = document.querySelectorAll('input');
     inputs.forEach(input => {
       input.addEventListener('focus', function() {
-        this.parentNode.querySelector('label').style.color = 'var(--primary-color)';
-        this.classList.add('animate__animated', 'animate__pulse');
+        this.parentNode.parentNode.querySelector('label').style.color = 'var(--primary-color)';
       });
       
       input.addEventListener('blur', function() {
-        this.parentNode.querySelector('label').style.color = '';
-        this.classList.remove('animate__animated', 'animate__pulse');
+        this.parentNode.parentNode.querySelector('label').style.color = '#555';
       });
     });
+    
+    // Add periodic pulse animation to card
+    setInterval(() => {
+      const card = document.querySelector('.card-animation');
+      card.classList.add('animate_animated', 'animate_pulse');
+      setTimeout(() => {
+        card.classList.remove('animate_animated', 'animate_pulse');
+      }, 1000);
+    }, 10000);
   </script>
 </body>
 </html>
