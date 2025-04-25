@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Flashcards | Student Quiz</title>
+  <title>Student Quiz | FlashLearn</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
-      --primary-color: #4361ee;
-      --secondary-color: #3f37c9;
-      --accent-color: #4cc9f0;
+      --primary-color: #ffa500;
+      --secondary-color: #d36525;
+      --accent-color: #ffa550;
       --light-color: #f8f9fa;
       --dark-color: #212529;
-      --success-color: #4bb543;
-      --error-color: #ff3333;
-      --warning-color: #ff9500;
+      --success-color: #38b000;
+      --error-color: #ff5a5f;
+      --student-color: #d16075;
     }
     
     * {
@@ -27,7 +27,7 @@
     
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+      background: #f5f7fa;
       min-height: 100vh;
       color: var(--dark-color);
     }
@@ -46,6 +46,7 @@
       position: relative;
       overflow: hidden;
       z-index: 1;
+      transition: all 0.3s ease;
     }
     
     .sidebar::before {
@@ -64,12 +65,13 @@
       display: flex;
       align-items: center;
       margin-bottom: 40px;
-      animation: animate__fadeInLeft 0.8s ease-out;
+      animation: fadeInLeft 0.8s ease-out;
     }
     
     .sidebar-header i {
       font-size: 1.8rem;
       margin-right: 15px;
+      color: var(--student-color);
     }
     
     .sidebar-header h2 {
@@ -84,7 +86,7 @@
     
     .sidebar-menu li {
       margin-bottom: 15px;
-      animation: animate__fadeInLeft 0.8s ease-out;
+      animation: fadeInLeft 0.8s ease-out;
       animation-fill-mode: both;
     }
     
@@ -119,6 +121,7 @@
       flex: 1;
       padding: 30px;
       position: relative;
+      background: #f5f7fa;
     }
     
     .header {
@@ -126,19 +129,29 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 30px;
+      animation: fadeInDown 0.8s ease-out;
     }
     
     .user-profile {
       display: flex;
       align-items: center;
+      background: white;
+      padding: 8px 15px;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     }
     
-    .user-profile img {
+    .author-avatar {
       width: 40px;
       height: 40px;
+      background: var(--student-color);
       border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
       margin-right: 10px;
-      object-fit: cover;
     }
     
     .user-profile span {
@@ -154,6 +167,7 @@
       margin: 0 auto;
       position: relative;
       overflow: hidden;
+      animation: fadeInUp 0.8s ease-out;
     }
     
     .quiz-container::before {
@@ -178,6 +192,15 @@
       color: var(--primary-color);
     }
     
+    #timer {
+      background: var(--primary-color);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-weight: 500;
+      box-shadow: 0 5px 15px rgba(123, 44, 191, 0.2);
+    }
+    
     .progress-container {
       width: 100%;
       background: #e0e0e0;
@@ -198,6 +221,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 30px;
+      gap: 15px;
     }
     
     .stat-box {
@@ -207,7 +231,6 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
       text-align: center;
       flex: 1;
-      margin: 0 10px;
       transition: all 0.3s ease;
       border-top: 3px solid var(--primary-color);
     }
@@ -241,7 +264,7 @@
     .card-inner {
       width: 100%;
       height: 100%;
-      transition: transform 0.6s;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       transform-style: preserve-3d;
       position: relative;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -342,13 +365,13 @@
     
     .btn-primary {
       background: var(--primary-color);
-      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      box-shadow: 0 4px 15px rgba(123, 44, 191, 0.3);
     }
     
     .btn-primary:hover {
       background: var(--secondary-color);
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+      box-shadow: 0 6px 20px rgba(123, 44, 191, 0.4);
     }
     
     .btn-secondary {
@@ -366,6 +389,7 @@
       text-align: center;
       padding: 40px;
       display: none;
+      animation: fadeIn 1s ease-out;
     }
     
     .end-screen h2 {
@@ -390,7 +414,7 @@
       position: absolute;
       width: 10px;
       height: 10px;
-      background-color: #f00;
+      background-color: var(--primary-color);
       border-radius: 50%;
       animation: confettiFall 5s linear forwards;
     }
@@ -421,7 +445,7 @@
       display: block;
       width: 20px;
       height: 20px;
-      background: rgba(67, 97, 238, 0.1);
+      background: rgba(123, 44, 191, 0.1);
       border-radius: 50%;
       animation: float 15s linear infinite;
       bottom: -150px;
@@ -500,8 +524,9 @@
     <div class="sidebar">
       <div class="sidebar-header">
         <i class="fas fa-graduation-cap"></i>
-        <h2>Flashcards</h2>
+        <h2>FlashLearn</h2>
       </div>
+      
       <ul class="sidebar-menu">
         <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
         <li><a href="#"><i class="fas fa-book"></i> My Subjects</a></li>
@@ -509,6 +534,7 @@
         <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
       </ul>
     </div>
+    
     <div class="main-content">
       <div class="floating-icons">
         <div class="floating-icon"></div>
@@ -516,21 +542,25 @@
         <div class="floating-icon"></div>
         <div class="floating-icon"></div>
       </div>
-      <div class="header animate__animated animate__fadeIn">
-        <h1>Quiz Time!</h1>
+      
+      <div class="header">
+        <h1 class="animate__animated animate__fadeIn">Quiz Time!</h1>
         <div class="user-profile">
-          <img src="https://via.placeholder.com/40" alt="User profile picture">
+          <div class="author-avatar">S</div>
           <span>Student</span>
         </div>
       </div>
-      <div class="quiz-container animate__animated animate__fadeInUp">
+      
+      <div class="quiz-container">
         <div class="quiz-header">
           <h1>Interactive Flashcards</h1>
-          <div id="timer" aria-live="polite">02:00</div>
+          <div id="timer">05:00</div>
         </div>
+        
         <div class="progress-container">
           <div class="progress-bar" id="progress-bar"></div>
         </div>
+        
         <div class="quiz-stats">
           <div class="stat-box">
             <h3>Score</h3>
@@ -545,79 +575,72 @@
             <p id="accuracy">0%</p>
           </div>
         </div>
-        <div class="card" id="flashcard" role="region" aria-live="assertive">
+        
+        <div class="card" id="flashcard">
           <div class="card-inner">
             <div class="card-front" id="question">Loading question...</div>
             <div class="card-back" id="answer">Loading answer...</div>
           </div>
         </div>
+        
         <div class="options" id="options"></div>
+        
         <div class="btn-group">
-          <button class="btn btn-secondary" id="flip-btn" aria-label="Flip flashcard"><i class="fas fa-sync-alt"></i> Flip</button>
-          <button class="btn btn-primary" id="next-btn" aria-label="Next question"><i class="fas fa-arrow-right"></i> Next</button>
+          <button class="btn btn-secondary" id="flip-btn"><i class="fas fa-sync-alt"></i> Flip</button>
+          <button class="btn btn-primary" id="next-btn"><i class="fas fa-arrow-right"></i> Next</button>
         </div>
-        <div class="end-screen animate__animated animate__fadeIn" id="end-message">
+        
+        <div class="end-screen" id="end-message">
           <h2>Quiz Completed!</h2>
           <p>You've finished all the questions. Well done!</p>
           <div class="final-score" id="final-score">0</div>
-          <button class="btn btn-primary" id="restart-btn" aria-label="Restart quiz"><i class="fas fa-redo"></i> Try Again</button>
+          <button class="btn btn-primary" onclick="location.reload()"><i class="fas fa-redo"></i> Try Again</button>
         </div>
       </div>
+      
       <div class="footer animate__animated animate__fadeIn animate__delay-1s">
-        <p>© 2025 Interactive Flashcards | Learning Made Engaging</p>
+        <p>© 2025 FlashLearn | Learning Made Engaging</p>
       </div>
     </div>
   </div>
-
+  
   <script>
-    // Flashcards data
-    let flashcards = [];
-    try {
-      const storedFlashcards = JSON.parse(localStorage.getItem('flashcards'));
-      if (Array.isArray(storedFlashcards) && storedFlashcards.every(card => 
-        card.question && card.answer && Array.isArray(card.options)
-      )) {
-        flashcards = storedFlashcards;
-      } else {
-        flashcards = [
-          {
-            question: "What is the capital of France?",
-            answer: "Paris",
-            options: ["London", "Berlin", "Madrid", "Paris"]
-          },
-          {
-            question: "Which planet is known as the Red Planet?",
-            answer: "Mars",
-            options: ["Venus", "Mars", "Jupiter", "Saturn"]
-          },
-          {
-            question: "What is the largest mammal in the world?",
-            answer: "Blue Whale",
-            options: ["Elephant", "Blue Whale", "Giraffe", "Polar Bear"]
-          },
-          {
-            question: "In which year did World War II end?",
-            answer: "1945",
-            options: ["1939", "1941", "1945", "1950"]
-          },
-          {
-            question: "Who painted the Mona Lisa?",
-            answer: "Leonardo da Vinci",
-            options: ["Pablo Picasso", "Vincent van Gogh", "Leonardo da Vinci", "Michelangelo"]
-          }
-        ];
+    // Enhanced flashcards data with more questions and options
+    let flashcards = JSON.parse(localStorage.getItem('flashcards')) || [
+      {
+        question: "What is the capital of France?",
+        answer: "Paris",
+        options: ["London", "Berlin", "Madrid", "Paris"]
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        answer: "Mars",
+        options: ["Venus", "Mars", "Jupiter", "Saturn"]
+      },
+      {
+        question: "What is the largest mammal in the world?",
+        answer: "Blue Whale",
+        options: ["Elephant", "Blue Whale", "Giraffe", "Polar Bear"]
+      },
+      {
+        question: "In which year did World War II end?",
+        answer: "1945",
+        options: ["1939", "1941", "1945", "1950"]
+      },
+      {
+        question: "Who painted the Mona Lisa?",
+        answer: "Leonardo da Vinci",
+        options: ["Pablo Picasso", "Vincent van Gogh", "Leonardo da Vinci", "Michelangelo"]
       }
-    } catch (e) {
-      console.error('Error loading flashcards from localStorage:', e);
-    }
-
+    ];
+    
     let current = 0;
     let score = 0;
     let answered = false;
     let correctAnswers = 0;
     let timerInterval;
-    let timeLeft = 120; // 2 minutes in seconds
-
+    let timeLeft = 300; // 5 minutes in seconds
+    
     // DOM Elements
     const questionEl = document.getElementById("question");
     const answerEl = document.getElementById("answer");
@@ -630,141 +653,125 @@
     const finalScoreEl = document.getElementById("final-score");
     const progressBar = document.getElementById("progress-bar");
     const timerEl = document.getElementById("timer");
-    const restartBtn = document.getElementById("restart-btn");
-
+    
     // Initialize the quiz
     function initQuiz() {
       updateQuestionCount();
       startTimer();
       loadCard();
     }
-
+    
     // Load the current card
     function loadCard() {
       if (flashcards.length === 0) {
         showEndScreen();
         return;
       }
-
+      
       answered = false;
       flashcard.classList.remove("flipped");
       const card = flashcards[current];
-
+      
       questionEl.textContent = card.question;
       answerEl.textContent = card.answer;
       optionsEl.innerHTML = "";
-
+      
       // Shuffle options
       const shuffledOptions = shuffleArray([...card.options]);
-
-      shuffledOptions.forEach((option, index) => {
+      
+      shuffledOptions.forEach(option => {
         const btn = document.createElement("button");
         btn.textContent = option;
         btn.className = "option-btn";
-        btn.setAttribute("aria-label", `Option ${index + 1}: ${option}`);
         btn.addEventListener("click", () => selectOption(option, card.answer, btn));
         optionsEl.appendChild(btn);
       });
-
-      // Update progress bar (animate only on first load or significant change)
-      if (current === 0 || current === flashcards.length - 1) {
-        progressBar.classList.add('animate__animated', 'animate__fadeIn');
-        setTimeout(() => {
-          progressBar.classList.remove('animate__animated', 'animate__fadeIn');
-        }, 500);
-      }
-      progressBar.style.width = `${((current + 1) / flashcards.length) * 100}%`;
+      
+      // Update progress bar
+      progressBar.style.width = ((current + 1) / flashcards.length) * 100 + '%';
     }
-
+    
     // Select an option
     function selectOption(selectedOption, correctAnswer, button) {
       if (answered) return;
-
+      
       answered = true;
       const allButtons = document.querySelectorAll('.option-btn');
-
+      
       allButtons.forEach(btn => {
         btn.disabled = true;
         if (btn.textContent === correctAnswer) {
-          btn.classList.add("correct", "animate__animated", "animate__bounceIn");
-          setTimeout(() => {
-            btn.classList.remove("animate__animated", "animate__bounceIn");
-          }, 1000);
+          btn.classList.add("correct");
         } else if (btn === button && btn.textContent !== correctAnswer) {
-          btn.classList.add("incorrect", "animate__animated", "animate__shakeX");
-          setTimeout(() => {
-            btn.classList.remove("animate__animated", "animate__shakeX");
-          }, 1000);
+          btn.classList.add("incorrect");
         }
       });
-
+      
       if (selectedOption === correctAnswer) {
         score++;
         correctAnswers++;
+        button.classList.add("correct");
         playSound('correct');
       } else {
+        button.classList.add("incorrect");
         playSound('wrong');
       }
-
+      
       updateStats();
     }
-
+    
     // Update all stats
     function updateStats() {
       scoreEl.textContent = score;
       updateQuestionCount();
       updateAccuracy();
     }
-
+    
     // Update question count display
     function updateQuestionCount() {
       questionCountEl.textContent = `${current + 1}/${flashcards.length}`;
     }
-
+    
     // Update accuracy percentage
     function updateAccuracy() {
-      const accuracy = current === 0 ? 0 : Math.round((correctAnswers / (current + 1)) * 100);
+      const accuracy = Math.round((correctAnswers / (current + 1)) * 100);
       accuracyEl.textContent = `${accuracy}%`;
     }
-
+    
     // Flip the card
     document.getElementById("flip-btn").addEventListener("click", () => {
       flashcard.classList.toggle("flipped");
-      flashcard.classList.add("animate__animated", "animate__flipInY");
       playSound('flip');
-      setTimeout(() => {
-        flashcard.classList.remove("animate__animated", "animate__flipInY");
-      }, 600);
     });
-
+    
     // Go to next card
     document.getElementById("next-btn").addEventListener("click", () => {
       playSound('click');
       current++;
-
+      
       if (current < flashcards.length) {
         loadCard();
       } else {
         showEndScreen();
       }
     });
-
+    
     // Show end screen with confetti
     function showEndScreen() {
       clearInterval(timerInterval);
       document.querySelector('.quiz-container').style.display = 'none';
       endMessageEl.style.display = 'block';
       finalScoreEl.textContent = score;
-
+      
       // Create confetti effect
       createConfetti();
       playSound('success');
     }
-
+    
     // Create confetti animation
     function createConfetti() {
-      const colors = ['#4361ee', '#3f37c9', '#4cc9f0', '#4895ef', '#560bad'];
-
+      const colors = ['#7b2cbf', '#5a189a', '#9d4edd', '#c77dff', '#e0aaff'];
+      
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
@@ -775,47 +782,45 @@
         confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
         confetti.style.animationDelay = `${Math.random() * 2}s`;
         document.body.appendChild(confetti);
-
+        
         // Remove confetti after animation
-        confetti.addEventListener('animationend', () => {
+        setTimeout(() => {
           confetti.remove();
-        });
+        }, 5000);
       }
     }
-
+    
     // Timer function
     function startTimer() {
       updateTimerDisplay();
       timerInterval = setInterval(() => {
         timeLeft--;
         updateTimerDisplay();
-
+        
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
           showEndScreen();
         }
       }, 1000);
     }
-
+    
     // Update timer display
     function updateTimerDisplay() {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
       timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
+      
       // Change color when time is running out
       if (timeLeft <= 30) {
         timerEl.style.color = 'var(--error-color)';
-        timerEl.classList.add('animate__animated', 'animate__pulse');
-      } else {
-        timerEl.classList.remove('animate__animated', 'animate__pulse');
+        timerEl.style.animation = 'pulse 1s infinite';
       }
     }
-
-    // Play sound effects with fallback
+    
+    // Play sound effects
     function playSound(type) {
       if (typeof Audio === 'undefined') return;
-
+      
       const sounds = {
         correct: 'https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3',
         wrong: 'https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3',
@@ -823,21 +828,12 @@
         click: 'https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3',
         success: 'https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3'
       };
-
+      
       const audio = new Audio(sounds[type]);
       audio.volume = 0.3;
-      audio.play().catch(e => {
-        console.log(`Audio play failed for ${type}:`, e);
-        // Fallback: Visual feedback if audio fails
-        if (type === 'correct' || type === 'wrong') {
-          flashcard.classList.add('animate__animated', type === 'correct' ? 'animate__tada' : 'animate__wobble');
-          setTimeout(() => {
-            flashcard.classList.remove('animate__animated', 'animate__tada', 'animate__wobble');
-          }, 1000);
-        }
-      });
+      audio.play().catch(e => console.log('Audio play failed:', e));
     }
-
+    
     // Helper function to shuffle array
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -846,39 +842,17 @@
       }
       return array;
     }
-
-    // Clean up confetti on page unload
-    window.addEventListener('beforeunload', () => {
-      document.querySelectorAll('.confetti').forEach(confetti => confetti.remove());
-    });
-
-    // Reset quiz state for restart
-    function restartQuiz() {
-      current = 0;
-      score = 0;
-      correctAnswers = 0;
-      answered = false;
-      timeLeft = 120;
-      document.querySelector('.quiz-container').style.display = 'block';
-      endMessageEl.style.display = 'none';
-      endMessageEl.classList.remove('animate__animated', 'animate__fadeIn');
-      clearInterval(timerInterval);
-      initQuiz();
-    }
-
+    
     // Initialize the quiz when page loads
     document.addEventListener('DOMContentLoaded', initQuiz);
-
-    // Add restart button listener
-    restartBtn.addEventListener('click', restartQuiz);
-
+    
     // Add keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') {
         document.getElementById('next-btn').click();
       } else if (e.key === 'f' || e.key === 'F') {
         document.getElementById('flip-btn').click();
-      } else if (e.key >= '1' && e.key <= '4' && !answered) {
+      } else if (['1', '2', '3', '4'].includes(e.key) && !answered) {
         const options = document.querySelectorAll('.option-btn');
         const index = parseInt(e.key) - 1;
         if (index < options.length) {
